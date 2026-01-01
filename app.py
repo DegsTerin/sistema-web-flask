@@ -8,7 +8,10 @@ app = Flask(__name__)
 app.secret_key = "troque-por-uma-chave-forte"
 
 def conectar():
-    return psycopg2.connect(os.environ["DATABASE_URL"])
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        raise RuntimeError("DATABASE_URL não configurada")
+    return psycopg2.connect(url)
 
 def criar_tabela():
     conn = conectar()
