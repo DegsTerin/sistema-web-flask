@@ -1,31 +1,41 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    margin: 40px;
+    background: #f4f6f8;
+    padding: 30px;
 }
 
 h1, h2 {
     color: #333;
 }
 
-input {
+input, textarea, select {
+    width: 300px;
     padding: 8px;
-    width: 250px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+textarea {
+    height: 80px;
 }
 
 button {
-    padding: 8px 12px;
-    margin-left: 5px;
+    padding: 8px 14px;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
-ul {
-    margin-top: 15px;
-}
-
-li {
+table {
+    border-collapse: collapse;
+    width: 100%;
     background: #fff;
-    margin-bottom: 5px;
+}
+
+th, td {
+    border: 1px solid #ddd;
     padding: 8px;
-    border-radius: 4px;
+}
+
+th {
+    background: #eee;
 }

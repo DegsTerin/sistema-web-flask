@@ -2,93 +2,52 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sistema de Usuários</title>
+    <title>Sistema de Ocorrências</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<h2>Login</h2>
+<h1>Sistema de Ocorrências</h1>
 
-<input type="text" id="login_nome" placeholder="Usuário">
-<input type="password" id="login_senha" placeholder="Senha">
-<button onclick="login()">Entrar</button>
+<section id="login-area">
+    <h2>Login</h2>
+    <input type="text" id="usuario" placeholder="Usuário">
+    <input type="password" id="senha" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+    <p id="login-msg"></p>
+</section>
 
-<p id="status"></p>
+<section id="ocorrencia-area" style="display:none;">
+    <h2>Nova Ocorrência</h2>
 
-<p id="msg"></p>
+    <input type="text" id="titulo" placeholder="Título">
+    <textarea id="descricao" placeholder="Descrição"></textarea>
 
-    <h1>Cadastro de Usuários</h1>
+    <select id="prioridade">
+        <option value="normal">Normal</option>
+        <option value="alta">Alta</option>
+        <option value="critica">Crítica</option>
+    </select>
 
-    <input type="text" id="nome" placeholder="Digite o nome">
-    <input type="password" id="senha" placeholder="Digite a senha">
-    <button onclick="criarUsuario()">Criar</button>
+    <button onclick="criarOcorrencia()">Registrar</button>
 
-    <h2>Usuários cadastrados</h2>
-    <button onclick="listarUsuarios()">Listar</button>
+    <h2>Minhas Ocorrências</h2>
+    <button onclick="listarOcorrencias()">Atualizar</button>
 
-    <ul id="lista"></ul>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Prioridade</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+    </table>
+</section>
 
-<script>
-
-function login() {
-    fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            nome: document.getElementById("login_nome").value,
-            senha: document.getElementById("login_senha").value
-        })
-    })
-    .then(res => res.json().then(data => ({ status: res.status, data })))
-    .then(resp => {
-        document.getElementById("status").innerText = resp.data.mensagem;
-    });
-}
-
-function criarUsuario() {
-    const nome = document.getElementById("nome").value;
-    const senha = document.getElementById("senha").value;
-
-    fetch("/criar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, senha })
-    })
-    .then(res => res.json())
-    .then(() => listarUsuarios());
-}
-
-function listarUsuarios() {
-fetch("/listar")
-.then(res => {
-    if (res.status === 401) {
-        alert("Faça login primeiro");
-        return [];
-    }
-    return res.json();
-})
-        .then(dados => {
-            const lista = document.getElementById("lista");
-            lista.innerHTML = "";
-
-            dados.forEach(item => {
-                const li = document.createElement("li");
-                li.textContent = item[1];
-
-                const btn = document.createElement("button");
-                btn.textContent = "Excluir";
-                btn.onclick = () => deletarUsuario(item[0]);
-
-                li.appendChild(btn);
-                lista.appendChild(li);
-            });
-        });
-}
-
-function deletarUsuario(id) {
-    fetch(`/deletar/${id}`, { method: "DELETE" })
-        .then(() => listarUsuarios());
-}
-</script>
+<script src="/static/app.js"></script>
 </body>
 </html>
